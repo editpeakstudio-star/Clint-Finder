@@ -1,0 +1,29 @@
+node_modules/
+build/
+dist/
+coverage/
+.DS_Store
+*.log
+.env*
+!.env.example
+
+# Telegram private session and secret files - NEVER COMMIT
+*.session
+*.session-journal
+*.session-*
+editpeak_session.session
+telegram_session_b64.txt
+*_session_b64.txt
+session_*.txt
+*.key
+*.pem
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# SQLite WAL and shm files
+data/*.db-wal
+data/*.db-shm

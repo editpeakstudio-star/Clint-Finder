@@ -1,0 +1,32 @@
+name: EditPeak Finder
+
+on:
+  workflow_dispatch:
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Restore Telegram session
+        env:
+          SESSION_B64: ${{ secrets.TELEGRAM_SESSION_B64 }}
+        run: |
+          echo "$SESSION_B64" | base64 -d > editpeak_session.session
+
+      - name: Run Finder
+        env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          OWNER_ID: ${{ secrets.OWNER_ID }}
+        run: python main.py

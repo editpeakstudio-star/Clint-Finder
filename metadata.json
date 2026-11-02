@@ -1,0 +1,6 @@
+{
+  "name": "Client Finder V2 — Private Telegram Intelligence Dashboard",
+  "description": "Commercial-grade private intelligence platform for automated Telegram video editing lead discovery, keyword monitoring, and source telemetry.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
