@@ -7,8 +7,8 @@ interface LoginPageProps {
 }
 
 export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
-  const [username, setUsername] = useState('Hacker');
-  const [password, setPassword] = useState('Hackerx');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
@@ -30,7 +30,13 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
         body: JSON.stringify({ username: username.trim(), password })
       });
 
-      const data = await res.json();
+      const raw = await res.text();
+      let data;
+      try {
+        data = raw ? JSON.parse(raw) : {};
+      } catch {
+        throw new Error('Server returned an invalid response. Check the backend.');
+      }
 
       if (!res.ok) {
         throw new Error(data.error || 'Authentication failed. Please verify credentials.');
@@ -163,7 +169,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
           <div className="mt-6 pt-4 border-t border-slate-800/60 text-center">
             <p className="text-[11px] text-slate-500 flex items-center justify-center gap-1.5">
               <Lock className="w-3 h-3 text-slate-400" />
-              Private system: Default credentials <code className="text-slate-300 font-mono">Hacker</code> / <code className="text-slate-300 font-mono">Hackerx</code>
+              Private system: Authorized access only <code className="text-slate-300 font-mono">Hacker</code> / <code className="text-slate-300 font-mono">Hackerx</code>
             </p>
           </div>
         </div>

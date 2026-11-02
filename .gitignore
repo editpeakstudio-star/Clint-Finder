@@ -27,3 +27,22 @@ __pycache__/
 # SQLite WAL and shm files
 data/*.db-wal
 data/*.db-shm
+
+# Private data and sessions
+.env
+.env.*
+!.env.example
+*.session
+*.session-journal
+telegram_session_b64.txt
+data/*.db
+data/*.sqlite
+data/*.sqlite3
+
+# Dependencies and build
+node_modules/
+dist/
+
+# Python cache
+__pycache__/
+*.pyc
