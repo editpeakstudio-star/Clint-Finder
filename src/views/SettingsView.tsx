@@ -1,3 +1,4 @@
+import { apiFetch } from '../lib/api';
 import React, { useState, useEffect } from 'react';
 import {
   Settings as SettingsIcon,
@@ -40,7 +41,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ user, onLogout, list
   useEffect(() => {
     const fetchSettings = async () => {
       try {
-        const res = await fetch('/api/settings');
+        const res = await apiFetch('/api/settings');
         if (res.ok) {
           const data = await res.json();
           if (data.settings) {
@@ -59,7 +60,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ user, onLogout, list
     setSaving(true);
     setSaveSuccess(false);
     try {
-      const res = await fetch('/api/settings', {
+      const res = await apiFetch('/api/settings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(settings)

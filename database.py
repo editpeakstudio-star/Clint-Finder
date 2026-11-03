@@ -35,7 +35,11 @@ def verify_password(password: str, stored_hash: str) -> bool:
             return False
     return False
 
-DB_DIR = os.path.join(os.path.dirname(__file__), "data")
+# Local default; Render can set DATABASE_DIR=/var/data
+DB_DIR = os.getenv(
+    "DATABASE_DIR",
+    os.path.join(os.path.dirname(__file__), "data")
+)
 DB = os.path.join(DB_DIR, "leads.db")
 
 # Default 80 keywords with their categories

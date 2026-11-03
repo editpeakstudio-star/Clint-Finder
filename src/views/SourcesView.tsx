@@ -1,3 +1,4 @@
+import { apiFetch } from '../lib/api';
 import React, { useState, useEffect } from 'react';
 import {
   Radio,
@@ -36,7 +37,7 @@ export const SourcesView: React.FC<SourcesViewProps> = ({ onRefreshStats, listen
   const fetchSources = async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/sources');
+      const res = await apiFetch('/api/sources');
       if (res.ok) {
         const data = await res.json();
         setSources(data.sources || []);
@@ -54,7 +55,7 @@ export const SourcesView: React.FC<SourcesViewProps> = ({ onRefreshStats, listen
 
   const handleToggleSource = async (id: number) => {
     try {
-      const res = await fetch(`/api/sources/${id}/toggle`, { method: 'PUT' });
+      const res = await apiFetch(`/api/sources/${id}/toggle`, { method: 'PUT' });
       if (res.ok) {
         fetchSources();
         onRefreshStats();
@@ -72,7 +73,7 @@ export const SourcesView: React.FC<SourcesViewProps> = ({ onRefreshStats, listen
     setAddError(null);
 
     try {
-      const res = await fetch('/api/sources', {
+      const res = await apiFetch('/api/sources', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -100,7 +101,7 @@ export const SourcesView: React.FC<SourcesViewProps> = ({ onRefreshStats, listen
   const handleDeleteConfirm = async () => {
     if (!sourceToDelete) return;
     try {
-      const res = await fetch(`/api/sources/${sourceToDelete}`, { method: 'DELETE' });
+      const res = await apiFetch(`/api/sources/${sourceToDelete}`, { method: 'DELETE' });
       if (res.ok) {
         fetchSources();
         onRefreshStats();

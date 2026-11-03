@@ -1,3 +1,4 @@
+import { apiFetch } from './lib/api';
 import React, { useState, useEffect, useCallback } from 'react';
 import { LoginPage } from './components/LoginPage';
 import { Sidebar, NavPage } from './components/Sidebar';
@@ -36,7 +37,7 @@ export default function App() {
   // Check Session on Mount
   const checkAuth = async () => {
     try {
-      const res = await fetch('/api/auth/me');
+      const res = await apiFetch('/api/auth/me');
       if (res.ok) {
         const data = await res.json();
         if (data.authenticated && data.user) {
@@ -58,7 +59,7 @@ export default function App() {
     if (!isSilent) setStatsLoading(true);
     setRefreshing(true);
     try {
-      const res = await fetch('/api/stats');
+      const res = await apiFetch('/api/stats');
       if (res.ok) {
         const data = await res.json();
         setStats(data);
@@ -75,7 +76,7 @@ export default function App() {
 
   const fetchNotificationsCount = useCallback(async () => {
     try {
-      const res = await fetch('/api/notifications');
+      const res = await apiFetch('/api/notifications');
       if (res.ok) {
         const data = await res.json();
         setUnreadNotifications(data.unread_count || 0);
@@ -106,7 +107,7 @@ export default function App() {
 
   const handleLogout = async () => {
     try {
-      await fetch('/api/auth/logout', { method: 'POST' });
+      await apiFetch('/api/auth/logout', { method: 'POST' });
     } catch {
       //
     } finally {
@@ -247,7 +248,7 @@ export default function App() {
         onClose={() => setInspectLead(null)}
         onDelete={async (id) => {
           try {
-            await fetch(`/api/leads/${id}`, { method: 'DELETE' });
+            await apiFetch(`/api/leads/${id}`, { method: 'DELETE' });
             setInspectLead(null);
             fetchStats(true);
           } catch {

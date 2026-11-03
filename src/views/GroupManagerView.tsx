@@ -1,3 +1,4 @@
+import { apiFetch } from '../lib/api';
 import React, { useState, useEffect } from 'react';
 import {
   Users2,
@@ -42,7 +43,7 @@ export const GroupManagerView: React.FC<GroupManagerViewProps> = ({ onRefreshSta
     setLoading(true);
     try {
       const params = new URLSearchParams({ search, status: statusFilter });
-      const res = await fetch(`/api/groups?${params.toString()}`);
+      const res = await apiFetch(`/api/groups?${params.toString()}`);
       if (res.ok) {
         const data = await res.json();
         setGroups(data.groups || []);
@@ -74,7 +75,7 @@ export const GroupManagerView: React.FC<GroupManagerViewProps> = ({ onRefreshSta
     setAddError(null);
 
     try {
-      const res = await fetch('/api/groups', {
+      const res = await apiFetch('/api/groups', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -102,7 +103,7 @@ export const GroupManagerView: React.FC<GroupManagerViewProps> = ({ onRefreshSta
 
   const handleToggleStatus = async (id: number) => {
     try {
-      const res = await fetch(`/api/groups/${id}/toggle`, { method: 'PUT' });
+      const res = await apiFetch(`/api/groups/${id}/toggle`, { method: 'PUT' });
       if (res.ok) {
         fetchGroups();
         onRefreshStats();
@@ -115,7 +116,7 @@ export const GroupManagerView: React.FC<GroupManagerViewProps> = ({ onRefreshSta
   const handleDeleteConfirm = async () => {
     if (!groupToDelete) return;
     try {
-      const res = await fetch(`/api/groups/${groupToDelete}`, { method: 'DELETE' });
+      const res = await apiFetch(`/api/groups/${groupToDelete}`, { method: 'DELETE' });
       if (res.ok) {
         fetchGroups();
         onRefreshStats();

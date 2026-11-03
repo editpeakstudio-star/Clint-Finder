@@ -1,3 +1,4 @@
+import { apiFetch } from '../lib/api';
 import React, { useState, useEffect } from 'react';
 import {
   KeyRound,
@@ -52,7 +53,7 @@ export const KeywordManagerView: React.FC<KeywordManagerViewProps> = ({ onRefres
         status: statusFilter,
         sort
       });
-      const res = await fetch(`/api/keywords?${params.toString()}`);
+      const res = await apiFetch(`/api/keywords?${params.toString()}`);
       if (res.ok) {
         const data = await res.json();
         setKeywords(data.keywords || []);
@@ -85,7 +86,7 @@ export const KeywordManagerView: React.FC<KeywordManagerViewProps> = ({ onRefres
     setSuccessMsg(null);
 
     try {
-      const res = await fetch('/api/keywords', {
+      const res = await apiFetch('/api/keywords', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -115,7 +116,7 @@ export const KeywordManagerView: React.FC<KeywordManagerViewProps> = ({ onRefres
 
   const handleToggleKeyword = async (id: number, currentEnabled: number) => {
     try {
-      const res = await fetch(`/api/keywords/${id}`, {
+      const res = await apiFetch(`/api/keywords/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ enabled: currentEnabled === 1 ? 0 : 1 })
@@ -131,7 +132,7 @@ export const KeywordManagerView: React.FC<KeywordManagerViewProps> = ({ onRefres
 
   const handlePriorityChange = async (id: number, priority: 'low' | 'normal' | 'high') => {
     try {
-      const res = await fetch(`/api/keywords/${id}`, {
+      const res = await apiFetch(`/api/keywords/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ priority })
@@ -147,7 +148,7 @@ export const KeywordManagerView: React.FC<KeywordManagerViewProps> = ({ onRefres
   const handleDeleteConfirm = async () => {
     if (!keywordToDelete) return;
     try {
-      const res = await fetch(`/api/keywords/${keywordToDelete}`, { method: 'DELETE' });
+      const res = await apiFetch(`/api/keywords/${keywordToDelete}`, { method: 'DELETE' });
       if (res.ok) {
         fetchKeywords();
         onRefreshStats();

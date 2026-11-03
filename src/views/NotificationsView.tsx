@@ -1,3 +1,4 @@
+import { apiFetch } from '../lib/api';
 import React, { useState, useEffect } from 'react';
 import {
   Bell,
@@ -29,7 +30,7 @@ export const NotificationsView: React.FC<NotificationsViewProps> = ({ onRefreshS
   const fetchNotifications = async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/notifications');
+      const res = await apiFetch('/api/notifications');
       if (res.ok) {
         const data = await res.json();
         setNotifications(data.notifications || []);
@@ -48,7 +49,7 @@ export const NotificationsView: React.FC<NotificationsViewProps> = ({ onRefreshS
 
   const handleMarkAllRead = async () => {
     try {
-      const res = await fetch('/api/notifications/mark-read', { method: 'POST' });
+      const res = await apiFetch('/api/notifications/mark-read', { method: 'POST' });
       if (res.ok) {
         fetchNotifications();
         onRefreshStats();
@@ -60,7 +61,7 @@ export const NotificationsView: React.FC<NotificationsViewProps> = ({ onRefreshS
 
   const handleClearAll = async () => {
     try {
-      const res = await fetch('/api/notifications', { method: 'DELETE' });
+      const res = await apiFetch('/api/notifications', { method: 'DELETE' });
       if (res.ok) {
         fetchNotifications();
         onRefreshStats();

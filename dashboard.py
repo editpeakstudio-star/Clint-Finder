@@ -4,6 +4,7 @@ import sqlite3
 from datetime import datetime, timedelta
 from functools import wraps
 from flask import Flask, request, jsonify, session
+from flask_cors import CORS
 
 from database import (
     get_connection, init_db, get_leads, delete_lead, bulk_delete_leads, save_lead,
@@ -17,13 +18,25 @@ from lead_analyzer import analyze
 init_db()
 
 app = Flask(__name__)
-app.secret_key = os.getenv("SESSION_SECRET", "editpeak-private-jwt-session-secret-key-32")
+app.secret_key = os.environ["SESSION_SECRET"]
 app.config.update(
     SESSION_COOKIE_HTTPONLY=True,
-    SESSION_COOKIE_SAMESITE="Lax",
-    SESSION_COOKIE_SECURE=False,  # Set True in production HTTPS
+    SESSION_COOKIE_SAMESITE="None",
+    SESSION_COOKIE_SECURE=True,
     PERMANENT_SESSION_LIFETIME=timedelta(days=7)
 )
+
+allowed_origins = [
+    origin.strip()
+    for origin in os.getenv("FRONTEND_ORIGIN", "").split(",")
+    if origin.strip()
+]
+CORS(
+    app,
+    resources={r"/api/*": {"origins": allowed_origins}},
+    supports_credentials=True
+)
+
 
 # In-memory login attempt rate limiting
 LOGIN_ATTEMPTS = {}

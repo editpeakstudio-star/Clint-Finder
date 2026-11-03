@@ -1,3 +1,4 @@
+import { apiFetch } from '../lib/api';
 import React, { useState, useEffect } from 'react';
 import {
   Search,
@@ -67,7 +68,7 @@ export const LeadFinderView: React.FC<LeadFinderViewProps> = ({ onRefreshStats }
         params.append('min_score', minScore.toString());
       }
 
-      const res = await fetch(`/api/leads?${params.toString()}`);
+      const res = await apiFetch(`/api/leads?${params.toString()}`);
       if (res.ok) {
         const data = await res.json();
         setLeads(data.leads || []);
@@ -83,7 +84,7 @@ export const LeadFinderView: React.FC<LeadFinderViewProps> = ({ onRefreshStats }
 
   const fetchSources = async () => {
     try {
-      const res = await fetch('/api/sources');
+      const res = await apiFetch('/api/sources');
       if (res.ok) {
         const data = await res.json();
         setAvailableSources((data.sources || []).map((s: any) => s.name));
@@ -139,7 +140,7 @@ export const LeadFinderView: React.FC<LeadFinderViewProps> = ({ onRefreshStats }
   const handleDeleteConfirm = async () => {
     if (!leadToDelete) return;
     try {
-      const res = await fetch(`/api/leads/${leadToDelete}`, { method: 'DELETE' });
+      const res = await apiFetch(`/api/leads/${leadToDelete}`, { method: 'DELETE' });
       if (res.ok) {
         setSelectedIds(prev => prev.filter(id => id !== leadToDelete));
         fetchLeads();
@@ -156,7 +157,7 @@ export const LeadFinderView: React.FC<LeadFinderViewProps> = ({ onRefreshStats }
   const handleBulkDeleteConfirm = async () => {
     if (!selectedIds.length) return;
     try {
-      const res = await fetch('/api/leads/bulk-delete', {
+      const res = await apiFetch('/api/leads/bulk-delete', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ids: selectedIds })

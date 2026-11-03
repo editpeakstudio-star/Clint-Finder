@@ -1,3 +1,4 @@
+import { apiFetch } from '../lib/api';
 import React, { useState } from 'react';
 import { X, Play, Sparkles, CheckCircle2, AlertTriangle, ArrowRight, Loader2, Send } from 'lucide-react';
 
@@ -32,7 +33,7 @@ export const TestLeadModal: React.FC<TestLeadModalProps> = ({
     setAnalyzing(true);
     setSimulatedSuccess(false);
     try {
-      const res = await fetch('/api/test-analyze', {
+      const res = await apiFetch('/api/test-analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text })
@@ -50,7 +51,7 @@ export const TestLeadModal: React.FC<TestLeadModalProps> = ({
     if (!text.trim()) return;
     setSimulating(true);
     try {
-      const res = await fetch('/api/simulate-lead', {
+      const res = await apiFetch('/api/simulate-lead', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text, source })

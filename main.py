@@ -17,6 +17,9 @@ from notifier import send_lead
 # Initialize database schemas and seeds immediately
 init_db()
 
+# Expose Flask app for Gunicorn deployment
+from dashboard import app
+
 API_ID_ENV = os.getenv("API_ID")
 API_HASH = os.getenv("API_HASH")
 
@@ -182,10 +185,23 @@ async def main():
 
 
 if __name__ == "__main__":
-    try:
-        asyncio.run(main())
-    except KeyboardInterrupt:
-        print("\nShutdown requested by operator.")
-    except Exception as e:
-        print(f"⚠️ Startup note: {e}")
+    mode = sys.argv[1].lower() if len(sys.argv) > 1 else "help"
+
+    if mode == "web":
+        port = int(os.getenv("PORT", "5000"))
+        print(f"Starting Clint-Finder Web Backend on port {port}")
+        app.run(host="0.0.0.0", port=port, debug=False)
+
+    elif mode == "worker":
+        try:
+            asyncio.run(main())
+        except KeyboardInterrupt:
+            print("\nWorker shutdown requested.")
+        except Exception as e:
+            print(f"Worker startup error: {e}")
+
+    else:
+        print("Clint-Finder Main Launcher")
+        print("Web:    python main.py web")
+        print("Worker: python main.py worker")
 
